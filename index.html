@@ -81,7 +81,7 @@
                     <div class="p-2.5 bg-sky-500/20 rounded-lg text-sky-400">
                         <i class="fas fa-eye"></i>
                     </div>
-                    <h2 class="text-xl font-bold">Nitidez (Pixéis)</h2>
+                    <h2 class="text-xl font-bold">Nitidez</h2>
                 </div>
 
                 <div class="space-y-6">
@@ -108,13 +108,7 @@
                     <div class="bg-sky-500/10 border border-sky-500/20 rounded-2xl py-6 text-center">
                         <p class="text-[10px] text-sky-300 uppercase tracking-widest font-bold mb-1">Distância Limite</p>
                         <div class="text-5xl font-bold text-white"><span id="min-dist">--</span><span class="text-xl ml-1 text-sky-400" id="dist-unit">m</span></div>
-                        <p class="text-[10px] text-slate-500 mt-2 px-4">Abaixo disto, os seus olhos conseguem ver os pixéis.</p>
-                    </div>
-
-                    <div class="h-24 w-full bg-slate-800/30 rounded-xl flex items-center justify-center relative overflow-hidden">
-                        <div id="tv-mockup" class="bg-slate-900 border-2 border-slate-700 rounded transition-all duration-500 flex items-center justify-center shadow-lg">
-                            <div id="device-icon" class="text-slate-600"></div>
-                        </div>
+                        <p class="text-[10px] text-slate-500 mt-2 px-4">Abaixo disto, os seus olhos conseguem ver os detalhes individuais da imagem.</p>
                     </div>
                 </div>
             </section>
@@ -182,8 +176,6 @@
         const minDistEl = document.getElementById('min-dist');
         const distUnitEl = document.getElementById('dist-unit');
         const tvSizeVal = document.getElementById('tv-size-val');
-        const tvMockup = document.getElementById('tv-mockup');
-        const deviceIcon = document.getElementById('device-icon');
 
         // Elementos Comparador
         const compSizeInput = document.getElementById('comp-size');
@@ -211,18 +203,6 @@
             } else {
                 minDistEl.innerText = distanceMeters.toFixed(2);
                 distUnitEl.innerText = "m";
-            }
-            
-            // UI Mockup Adaptativo
-            if (size < 15) {
-                tvMockup.style.width = '30px'; tvMockup.style.height = '55px';
-                deviceIcon.innerHTML = '<i class="fas fa-mobile-alt text-[10px]"></i>';
-            } else if (size < 35) {
-                tvMockup.style.width = '70px'; tvMockup.style.height = '40px';
-                deviceIcon.innerHTML = '<i class="fas fa-laptop text-xs"></i>';
-            } else {
-                tvMockup.style.width = '110px'; tvMockup.style.height = '62px';
-                deviceIcon.innerHTML = '<i class="fas fa-tv text-lg"></i>';
             }
         }
 
