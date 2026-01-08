@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VisionDisplay Pro | Mobile Ready</title>
+    <!-- Tailwind para Estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Ícones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f172a; 
+            color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .glass { 
+            background: rgba(30, 41, 59, 0.7); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+
+        .gradient-text { 
+            background: linear-gradient(90deg, var(--primary), var(--secondary)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+
+        /* Estilização Customizada dos Sliders para Mobile */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #334155;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 3px solid #0f172a;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Prevenir zoom em inputs no iOS */
+        input[type="number"], select {
+            font-size: 16px !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-10">
+
+    <div class="max-w-md mx-auto px-4 pt-6 md:max-w-5xl">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold mb-2 gradient-text">VisionDisplay Pro</h1>
+            <p class="text-slate-400 text-sm">Calculadora de Nitidez e Imersão Visual</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Card 1: Distância de Nitidez -->
+            <section class="glass p-5 rounded-2xl shadow-xl">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="p-2.5 bg-sky-500/20 rounded-lg text-sky-400">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h2 class="text-xl font-bold">Nitidez (Pixéis)</h2>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-300">Tamanho da Tela</label>
+                            <span id="tv-size-val" class="text-sky-400 font-bold">55"</span>
+                        </div>
+                        <input type="range" id="tv-size" min="4" max="120" value="55">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2 text-slate-300">Resolução</label>
+                        <select id="tv-res" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-sky-500 outline-none text-sm appearance-none">
+                            <option value="720">HD (720p)</option>
+                            <option value="1080">Full HD (1080p)</option>
+                            <option value="1440" selected>Quad HD / 2K (1440p)</option>
+                            <option value="2160">4K Ultra HD (2160p)</option>
+                            <option value="2532">Retina (iPhone 15+)</option>
+                            <option value="4320">8K Ultra HD (4320p)</option>
+                        </select>
+                    </div>
+
+                    <div class="bg-sky-500/10 border border-sky-500/20 rounded-2xl py-6 text-center">
+                        <p class="text-[10px] text-sky-300 uppercase tracking-widest font-bold mb-1">Distância Limite</p>
+                        <div class="text-5xl font-bold text-white"><span id="min-dist">--</span><span class="text-xl ml-1 text-sky-400" id="dist-unit">m</span></div>
+                        <p class="text-[10px] text-slate-500 mt-2 px-4">Abaixo disto, os seus olhos conseguem ver os pixéis.</p>
+                    </div>
+
+                    <div class="h-24 w-full bg-slate-800/30 rounded-xl flex items-center justify-center relative overflow-hidden">
+                        <div id="tv-mockup" class="bg-slate-900 border-2 border-slate-700 rounded transition-all duration-500 flex items-center justify-center shadow-lg">
+                            <div id="device-icon" class="text-slate-600"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Card 2: Comparador de Imersão -->
+            <section class="glass p-5 rounded-2xl shadow-xl">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="p-2.5 bg-indigo-500/20 rounded-lg text-indigo-400">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
+                    <h2 class="text-xl font-bold">Imersão (FOV)</h2>
+                </div>
+
+                <div class="space-y-5">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-800/40 p-3 rounded-xl border border-slate-700">
+                            <label class="block text-[10px] text-slate-400 uppercase font-bold mb-1">Tela Atual (")</label>
+                            <input type="number" id="comp-size" value="6.1" step="0.1" class="w-full bg-transparent text-lg text-indigo-400 font-bold outline-none">
+                        </div>
+                        <div class="bg-slate-800/40 p-3 rounded-xl border border-slate-700">
+                            <label class="block text-[10px] text-slate-400 uppercase font-bold mb-1">Dist. Uso (m)</label>
+                            <input type="number" id="comp-dist" value="0.3" step="0.05" class="w-full bg-transparent text-lg text-indigo-400 font-bold outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium text-slate-300">Comparar a uma distância de</label>
+                            <span id="target-dist-val" class="text-indigo-400 font-bold">3.0m</span>
+                        </div>
+                        <input type="range" id="target-dist" min="0.5" max="10" step="0.1" value="3.0">
+                    </div>
+
+                    <div class="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl py-6 text-center">
+                        <p class="text-[10px] text-indigo-300 uppercase tracking-widest font-bold mb-1">Equivalência Visual</p>
+                        <div class="text-5xl font-bold text-white"><span id="equiv-size">--</span><span class="text-xl ml-1 text-indigo-400">"</span></div>
+                        <p id="equiv-desc" class="text-[10px] text-slate-500 mt-2 px-4 leading-tight"></p>
+                    </div>
+
+                    <div class="flex justify-center items-end h-16 gap-8">
+                        <div class="text-center">
+                            <div id="bar-current" class="bg-slate-700 w-10 mx-auto rounded-t-md transition-all duration-500"></div>
+                            <span class="text-[8px] uppercase mt-1 block text-slate-500">Atual</span>
+                        </div>
+                        <div class="text-center">
+                            <div id="bar-equiv" class="bg-indigo-500 w-10 mx-auto rounded-t-md transition-all duration-500 shadow-lg shadow-indigo-500/20"></div>
+                            <span class="text-[8px] uppercase mt-1 block text-slate-500">Equiv.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="mt-8 px-4 text-center">
+            <p class="text-[10px] text-slate-500 leading-relaxed">
+                VisionDisplay Pro utiliza cálculos trigonométricos baseados no limite de resolução da retina humana. Ideal para entusiastas de tecnologia, gamers e profissionais de vídeo.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Elementos Nitidez
+        const tvSizeInput = document.getElementById('tv-size');
+        const tvResSelect = document.getElementById('tv-res');
+        const minDistEl = document.getElementById('min-dist');
+        const distUnitEl = document.getElementById('dist-unit');
+        const tvSizeVal = document.getElementById('tv-size-val');
+        const tvMockup = document.getElementById('tv-mockup');
+        const deviceIcon = document.getElementById('device-icon');
+
+        // Elementos Comparador
+        const compSizeInput = document.getElementById('comp-size');
+        const compDistInput = document.getElementById('comp-dist');
+        const targetDistInput = document.getElementById('target-dist');
+        const targetDistVal = document.getElementById('target-dist-val');
+        const equivSizeEl = document.getElementById('equiv-size');
+        const equivDesc = document.getElementById('equiv-desc');
+        const barCurrent = document.getElementById('bar-current');
+        const barEquiv = document.getElementById('bar-equiv');
+
+        function updateDistance() {
+            const size = parseFloat(tvSizeInput.value);
+            const resHeight = parseInt(tvResSelect.value);
+            tvSizeVal.innerText = size + '"';
+            
+            const heightInches = size * 0.4903;
+            const pixelSize = heightInches / resHeight;
+            const distanceInches = pixelSize / 0.000290888;
+            const distanceMeters = distanceInches * 0.0254;
+
+            if (distanceMeters < 1) {
+                minDistEl.innerText = Math.round(distanceMeters * 100);
+                distUnitEl.innerText = "cm";
+            } else {
+                minDistEl.innerText = distanceMeters.toFixed(2);
+                distUnitEl.innerText = "m";
+            }
+            
+            // UI Mockup Adaptativo
+            if (size < 15) {
+                tvMockup.style.width = '30px'; tvMockup.style.height = '55px';
+                deviceIcon.innerHTML = '<i class="fas fa-mobile-alt text-[10px]"></i>';
+            } else if (size < 35) {
+                tvMockup.style.width = '70px'; tvMockup.style.height = '40px';
+                deviceIcon.innerHTML = '<i class="fas fa-laptop text-xs"></i>';
+            } else {
+                tvMockup.style.width = '110px'; tvMockup.style.height = '62px';
+                deviceIcon.innerHTML = '<i class="fas fa-tv text-lg"></i>';
+            }
+        }
+
+        function updateComparison() {
+            const currentSize = parseFloat(compSizeInput.value) || 0;
+            const currentDist = parseFloat(compDistInput.value) || 0.1;
+            const targetDist = parseFloat(targetDistInput.value);
+
+            targetDistVal.innerText = targetDist.toFixed(1) + 'm';
+
+            const equivalentSize = (currentSize / currentDist) * targetDist;
+            
+            equivSizeEl.innerText = Math.round(equivalentSize);
+            
+            const distLabel = currentDist < 1 ? Math.round(currentDist*100)+'cm' : currentDist+'m';
+            equivDesc.innerText = `O seu dispositivo atual a ${distLabel} equivale a uma TV de ${Math.round(equivalentSize)}" posicionada a ${targetDist}m.`;
+
+            // Gráficos de barra
+            barCurrent.style.height = Math.max(10, Math.min(64, (currentSize / 100) * 64)) + 'px';
+            barEquiv.style.height = Math.max(10, Math.min(64, (equivalentSize / 200) * 64)) + 'px';
+        }
+
+        // Listeners com suporte a touch
+        [tvSizeInput, tvResSelect].forEach(el => el.addEventListener('input', updateDistance));
+        [compSizeInput, compDistInput, targetDistInput].forEach(el => el.addEventListener('input', updateComparison));
+
+        // Inicializar
+        updateDistance();
+        updateComparison();
+    </script>
+</body>
+</html>
